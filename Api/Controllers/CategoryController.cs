@@ -1,4 +1,6 @@
+using Domain.Common;
 using Domain.Entities;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -8,33 +10,64 @@ namespace Api.Controllers;
 public class CategoryController : ControllerBase
 {
     private readonly ILogger<CategoryController> _logger;
+    private readonly CategoryService _service;
 
     public CategoryController(ILogger<CategoryController> logger)
     {
         _logger = logger;
+        _service = new CategoryService();
     }
 
     [HttpGet(Name = "ListCategories")]
-    public IEnumerable<Category> Get()
+    public async Task<IEnumerable<Category>> Get()
     {
-        throw new NotImplementedException();
+        try
+        {
+            return await _service.ListCategories();
+        }
+        catch (Exception exc)
+        {
+            _logger.Log(LogLevel.Error, exc.GetExceptionMessages());
+            return null;
+        }
     }
 
     [HttpPost(Name = "AddCategory")]
-    public IEnumerable<Category> Post()
+    public async Task Post(Category category)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _service.AddCategory(category);
+        }
+        catch (Exception exc)
+        {
+            _logger.Log(LogLevel.Error, exc.GetExceptionMessages());
+        }
     }
 
     [HttpPut(Name = "UpdateCategory")]
-    public IEnumerable<Category> Put()
+    public async Task Put(int categoryId, Category category)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _service.UpdateCategory(categoryId, category);
+        }
+        catch (Exception exc)
+        {
+            _logger.Log(LogLevel.Error, exc.GetExceptionMessages());
+        }
     }
 
     [HttpDelete(Name = "DeleteCategory")]
-    public IEnumerable<Category> Delete()
+    public async Task Delete(int categoryId)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _service.DeleteCategory(categoryId);
+        }
+        catch (Exception exc)
+        {
+            _logger.Log(LogLevel.Error, exc.GetExceptionMessages());
+        }
     }
 }

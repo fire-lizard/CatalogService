@@ -18,7 +18,7 @@ namespace Domain.Entities
         [Column("category_id")]
         public long CategoryId { get; set; }
         [Column("item_price", TypeName = "DECIMAL (10, 2)")]
-        public byte[] ItemPrice { get; set; } = null!;
+        public double ItemPrice { get; set; }
         [Column("item_amt")]
         public long ItemAmt { get; set; }
 
