@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
+using Experimental.System.Messaging;
 
 namespace Api.Controllers;
 
@@ -11,7 +12,15 @@ public class ItemController : ControllerBase
 {
     private readonly ILogger<ItemController> _logger;
     private readonly ItemService _service;
+    private const string _mqName = ".\\Private$\\billpay";
 
+    public struct ChangedItem
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public double Price { get; set; }
+    }
+    
     public ItemController(ILogger<ItemController> logger)
     {
         _logger = logger;
@@ -51,6 +60,16 @@ public class ItemController : ControllerBase
         try
         {
             await _service.UpdateItem(itemId, item);
+            ChangedItem changedItem = new ChangedItem
+            {
+                Id = item.ItemId,
+                Name = item.ItemNm,
+                Price = item.ItemPrice
+            };
+            Message msg = new Message();
+            msg.Body = changedItem;
+            MessageQueue mq = new MessageQueue(_mqName);
+            mq.Send(msg);
         }
         catch (Exception exc)
         {
