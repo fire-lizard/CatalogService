@@ -1,4 +1,5 @@
 /.idea
+/.vs
 /Api/bin
 /Api/obj
 /Domain/bin

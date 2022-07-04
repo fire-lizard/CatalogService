@@ -1,5 +1,5 @@
-using Domain.Common;
 using Domain.Entities;
+using Infrastructure.Common;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
