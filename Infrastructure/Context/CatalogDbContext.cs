@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Context
 {
     public partial class CatalogDbContext : DbContext
     {
-        private string _cstring =
-            "Data Source=C:\\Users\\firelizard\\RiderProjects\\CatalogService\\Data\\catalog.sqlite";
+        private readonly string _cstring =
+            new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AppSettings")["ConnectionString"]?.Replace("%USERNAME%", Environment.UserName);
         
         public CatalogDbContext()
         {
